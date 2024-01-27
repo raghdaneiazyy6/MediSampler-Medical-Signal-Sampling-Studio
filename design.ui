@@ -770,7 +770,7 @@ color: rgb(66, 111, 111);</string>
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>30</height>
+               <height>35</height>
               </size>
              </property>
             </spacer>
@@ -790,98 +790,65 @@ color: rgb(66, 111, 111);</string>
               <item row="0" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_8">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
                   <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_7">
-                    <item>
-                     <widget class="QLabel" name="label_3">
-                      <property name="font">
-                       <font>
-                        <pointsize>13</pointsize>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>Sampling Frequency:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QSlider" name="samplingFrequencySlider">
-                      <property name="cursor">
-                       <cursorShape>ClosedHandCursor</cursorShape>
-                      </property>
-                      <property name="inputMethodHints">
-                       <set>Qt::ImhDigitsOnly</set>
-                      </property>
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="tickPosition">
-                       <enum>QSlider::TicksBelow</enum>
-                      </property>
-                      <property name="tickInterval">
-                       <number>1</number>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLCDNumber" name="samplingFrequencyLCD">
-                      <property name="sizePolicy">
-                       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                       </sizepolicy>
-                      </property>
-                      <property name="maximumSize">
-                       <size>
-                        <width>16777215</width>
-                        <height>30</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="normlabel">
-                      <property name="font">
-                       <font>
-                        <pointsize>12</pointsize>
-                        <bold>true</bold>
-                       </font>
-                      </property>
-                      <property name="text">
-                       <string>fmax</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <spacer name="horizontalSpacer_9">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeType">
-                       <enum>QSizePolicy::Preferred</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>60</width>
-                        <height>32</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="normalizeSignalCheckbox">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="toolTip">
-                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; color:#000000;&quot;&gt;Normalized sampling frequency&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <widget class="QLabel" name="label_3">
+                    <property name="font">
+                     <font>
+                      <pointsize>13</pointsize>
+                      <bold>true</bold>
+                     </font>
                     </property>
                     <property name="text">
-                     <string>Normalized Frequency</string>
+                     <string>Sampling Frequency:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QSlider" name="samplingFrequencySlider">
+                    <property name="cursor">
+                     <cursorShape>ClosedHandCursor</cursorShape>
+                    </property>
+                    <property name="inputMethodHints">
+                     <set>Qt::ImhDigitsOnly</set>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="tickPosition">
+                     <enum>QSlider::TicksBelow</enum>
+                    </property>
+                    <property name="tickInterval">
+                     <number>1</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLCDNumber" name="samplingFrequencyLCD">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>30</height>
+                     </size>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="normlabel">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>fmax</string>
                     </property>
                    </widget>
                   </item>
@@ -999,7 +966,7 @@ color: rgb(66, 111, 111);</string>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>90</width>
+                      <width>100</width>
                       <height>20</height>
                      </size>
                     </property>
@@ -1060,6 +1027,19 @@ color: rgb(66, 111, 111);</string>
              </layout>
             </widget>
            </item>
+           <item>
+            <widget class="QCheckBox" name="normalizeSignalCheckbox">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; color:#000000;&quot;&gt;Normalized sampling frequency&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>Normalized Frequency</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -1075,7 +1055,7 @@ color: rgb(66, 111, 111);</string>
      <x>0</x>
      <y>0</y>
      <width>1011</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

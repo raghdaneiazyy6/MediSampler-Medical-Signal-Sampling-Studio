@@ -12,8 +12,6 @@ from scipy.fft import fft, fftfreq
 import math
 import pickle
 
-from scipy import interpolate
-
 
 FORM_CLASS, _ = loadUiType(path.join(path.dirname(__file__), "design.ui"))
 
@@ -250,7 +248,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.cleared = False
         file_data = None
         options = QFileDialog.Option.ReadOnly
-        file_name, _ = QFileDialog.getOpenFileName(self, "Open Files", ".dat", "All Files (*)", options=options)
+        file_name, _ = QFileDialog.getOpenFileName(self, "Open Files", ".pkl", "All Files (*)", options=options)
         if file_name:
             with open(file_name, 'rb') as file:
                 file_data = pickle.load(file)
@@ -332,7 +330,6 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.samplingFrequencySlider.setTickPosition(QSlider.TickPosition.TicksBelow)
             self.samplingFrequencySlider.valueChanged.connect(lambda: self.samplingFrequencyLCD.display(self.samplingFrequencySlider.value())) 
             self.samplingFrequencySlider.setValue(2 * fmax)  # Set to 2xfmax initially
-            # fe moshkela flline eltaht
             self.samplingFrequencySlider.sliderMoved.disconnect(self.snap_to_interval)
 
         self.plot_sampling(self.samplingFrequencySlider.value(), self.addNoiseCheckbox.isChecked(), self.snrSlider.value())
