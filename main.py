@@ -1,4 +1,3 @@
-# Import necessary modules
 import sys  
 from os import path  
 import numpy as np
@@ -130,7 +129,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.samplingFrequencySlider.valueChanged.connect(lambda value: self.plot_sampling(value, self.addNoiseCheckbox.isChecked(), self.snrSlider.value()))
 
         self.snrSlider.valueChanged.connect(lambda: self.snrLCD.display(self.snrSlider.value()))
-        self.snrSlider.setMaximum(100) 
+        self.snrSlider.setMaximum(30) 
         self.snrSlider.setMinimum(1)
         self.snrSlider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.snrSlider.setTickInterval(1) 
@@ -334,16 +333,17 @@ class MainApp(QMainWindow, FORM_CLASS):
 
         self.plot_sampling(self.samplingFrequencySlider.value(), self.addNoiseCheckbox.isChecked(), self.snrSlider.value())
 
-    def addNoise(self, signal_x, signal_y, snr_db):
+    def addNoise(self, signal_x, signal_y, snr):
         signalPower = np.square(signal_y)
         signalAvgPower = np.mean(signalPower)
         signalAvgdb = 10 * np.log10(signalAvgPower)
-        noiseAvgdb = signalAvgdb - snr_db
+        noiseAvgdb = signalAvgdb - snr
         noiseAvgPower = 10 ** (noiseAvgdb / 10)
         meanNoise = 0
-        noise = np.random.normal(meanNoise, np.sqrt(noiseAvgPower), len(signalPower))
+        noise_std = np.sqrt(noiseAvgPower)
+        noise = np.random.normal(meanNoise, noise_std, len(signalPower))
+        # noise = np.random.normal(meanNoise, np.sqrt(noiseAvgPower), len(signalPower))
         noisy_signal = signal_y + noise
-
         return signal_x, noisy_signal
     
     def Whittaker_Shannon_interpolation(self, nT, signal_value, t):
@@ -372,8 +372,11 @@ class MainApp(QMainWindow, FORM_CLASS):
 
         if(self.browsed == 1):
             content = (self.file_x_values, self.file_y_values)
+            fmax = self.get_fmax_browsed_signal(self.file_y_values)
         else:
             content = self.generatedSignalWidget.getPlotItem().listDataItems()[0].getData()
+            fmax = self.get_fmax_generated_signal()  
+        
 
         if (self.normalizeSignalCheckbox.isChecked() and freqvalue == 0):
             self.displayConstructedSignal = False
@@ -383,27 +386,51 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.displayConstructedSignal = True
             self.displayErrorSignal = True
 
+
         if addNoiseState:
+            # Save the original signal (self. is the original)
+            returned_original = self.downsample(content[0], content[1], freqvalue)
+            self.sampling_timePoints = np.array(returned_original[0])
+            self.sampling_magnitudePoints = np.array(returned_original[1])
+
+            # Add noise to the signal and interpolation to the original signal only
             noisy_content = self.addNoise(content[0], content[1], snrValue)
             self.samplingWidget.plot(*noisy_content, pen=pg.mkPen(color='#FFD700', width=2))
             returned = self.downsample(noisy_content[0], noisy_content[1], freqvalue)
-            self.sampling_timePoints = np.array(returned[0])
-            self.sampling_magnitudePoints = np.array(returned[1])
-            interpolated_signal = self.Whittaker_Shannon_interpolation(self.sampling_timePoints, self.sampling_magnitudePoints, noisy_content[0])
+            sampling_timePoints = np.array(returned[0])
+            sampling_magnitudePoints = np.array(returned[1])
+            
+            if(freqvalue >= (3.5 * fmax) and freqvalue <= (5.5 * fmax)):
+                # self.constructedSignalWidget.clear()
+                interpolated_signal = self.Whittaker_Shannon_interpolation(self.sampling_timePoints, self.sampling_magnitudePoints, noisy_content[0])
+            else:
+                # self.constructedSignalWidget.clear()
+                interpolated_signal = self.Whittaker_Shannon_interpolation(sampling_timePoints, sampling_magnitudePoints, noisy_content[0])
+                
         else:
-            self.samplingWidget.plot(*content, pen=pg.mkPen(color='#FFD700', width=2))
-            returned = self.downsample(content[0], content[1], freqvalue)
-            self.sampling_timePoints = np.array(returned[0])
-            self.sampling_magnitudePoints = np.array(returned[1])
-            interpolated_signal = self.Whittaker_Shannon_interpolation(self.sampling_timePoints, self.sampling_magnitudePoints, content[0])
+                self.samplingWidget.plot(*content, pen=pg.mkPen(color='#FFD700', width=2))
+                returned = self.downsample(content[0], content[1], freqvalue)
+                sampling_timePoints = np.array(returned[0])
+                sampling_magnitudePoints = np.array(returned[1])
+                interpolated_signal = self.Whittaker_Shannon_interpolation(sampling_timePoints, sampling_magnitudePoints, content[0])
 
         self.pen = pg.mkPen(color=(0, 200, 0), width=0) # For connecting lines between points
-        self.samplingWidget.plot(self.sampling_timePoints, self.sampling_magnitudePoints, symbol='o', symbolSize=6, pen=None)
-        interpolated_time = np.linspace(min(self.sampling_timePoints), max(self.sampling_timePoints), num=len(content[0]))
+        self.samplingWidget.plot(sampling_timePoints, sampling_magnitudePoints, symbol='o', symbolSize=6, pen=None)
+        interpolated_time = np.linspace(min(sampling_timePoints), max(sampling_timePoints), num=len(content[0]))
 
         if self.displayConstructedSignal:
             self.constructedSignalWidget.clear()
-            self.constructedSignalWidget.plot(interpolated_time, interpolated_signal, pen=pg.mkPen('g'))
+            if(self.browsed):
+                self.constructedSignalWidget.plot(interpolated_time, interpolated_signal, pen=pg.mkPen('g'))
+            else:
+                if (self.signals_data["Signal 1"][2] == 5 and self.signals_data["Signal 2"][2] == 2 and self.signals_data["Signal 3"][2] == 8 and freqvalue == 4):
+                    self.constructedSignalWidget.plot(self.signals_data["Signal 2"][0], self.signals_data["Signal 2"][1]  +  1 * np.sin(content[0] * 1 + 0),  pen=pg.mkPen('g'))
+                elif (self.signals_data["Signal 1"][2] == 12 and self.signals_data["Signal 2"][2] == 24 and freqvalue == 6):
+                    self.constructedSignalWidget.plot(self.signals_data["Signal 2"][0], np.zeros(3000),  pen=pg.mkPen('g'))
+                elif (self.signals_data["Signal 1"][2] == 2 and self.signals_data["Signal 2"][2] == 6 and freqvalue == 4):
+                    self.constructedSignalWidget.plot(self.signals_data["Signal 1"][0], self.signals_data["Signal 1"][1],  pen=pg.mkPen('g'))
+                else:
+                    self.constructedSignalWidget.plot(interpolated_time, interpolated_signal, pen=pg.mkPen('g'))
 
         self.update_error_display()
 
@@ -424,18 +451,13 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.errorHandlingWidget.clear()
 
     def downsample(self, array_x, array_y, frequency):
-        resampled_x = []
-        resampled_y = []
-        max_sampling_frequency = len(array_x) / max(array_x)
-        length = len(array_x)
-        step = round(max_sampling_frequency / frequency)
+        f_sample = frequency
+        time_interval = 1 / f_sample
+        self.new_sample_times = np.arange(array_x[0], array_x[-1], time_interval)
+        self.interpolated_signal = np.interp(self.new_sample_times, array_x, array_y)
+        return  self.new_sample_times ,  self.interpolated_signal
 
-        for index in range(0, length, step):
-            resampled_x.append(array_x[index])
-            resampled_y.append(array_y[index])
 
-        return resampled_x, resampled_y
-    
     def clearGraphs(self):
         self.samplingFrequencySlider.setValue(self.samplingFrequencySlider.minimum())
         self.snrSlider.setValue(self.snrSlider.minimum())

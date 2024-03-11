@@ -6,6 +6,9 @@ Welcome to Medisampler, your gateway to precise medical signal processing. In th
 
 MediSampler is a desktop application designed for medical signal sampling and recovery. It demonstrates the critical concept of Nyquist–Shannon sampling theorem in the context of medical signals. The tool allows users to load, visualize, and sample signals at different frequencies, showcasing the importance of proper sampling rates for accurate signal recovery. With features like real-time processing, additive noise simulation, and customizable Signal-to-Noise Ratio (SNR), MediSampler is a versatile tool for medical signal processing enthusiasts.
 
+## Preview
+![Animation Gif](Demo.gif)
+
 ## Features
 
 - **Sample & Recover:**
@@ -66,28 +69,20 @@ Explore diverse testing scenarios tailored for medical precision:
   - Analyze blood pressure oscillations in synthetic arterial pulsation signals.
   - Investigate how sampling frequency impacts the accuracy of oscillation detection.
   - Introduce additive noise to simulate clinical interference in blood pressure monitoring.
-    
-## A Glimpse Into the Future of Medical Signal Processing
-
-[Insert screenshots, GIFs, or video snippets showcasing Medisampler in action, particularly in medical contexts.]
-
-## Installation
-
-[Provide step-by-step instructions on how to install and run Medisampler for your medical signal processing needs.]
 
 ## Contributors
 
 Gratitude goes out to all team members for their valuable contributions to this project.
 
 <div align="left">
+    <a href="https://github.com/AhmeddEmad7">
+    <img src="https://github.com/AhmeddEmad7.png" width="100px" alt="@AhmeddEmad7">
+  </a>
   <a href="https://github.com/hazemzakariasaad">
     <img src="https://github.com/hazemzakariasaad.png" width="100px" alt="@hazemzakariasaad">
   </a>
   <a href="https://github.com/nourhan-ahmedd">
     <img src="https://github.com/nourhan-ahmedd.png" width="100px" alt="@nourhan-ahmedd">
-  </a>
-  <a href="https://github.com/AhmeddEmad7">
-    <img src="https://github.com/AhmeddEmad7.png" width="100px" alt="@AhmeddEmad7">
   </a>
   <a href="https://github.com/raghdaneiazyy6">
     <img src="https://github.com/raghdaneiazyy6.png" width="100px" alt="@raghdaneiazy6">
